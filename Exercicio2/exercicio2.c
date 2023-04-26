@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct palavra{
     char primLetra, segLetra, tercLetra, quarLetra;
@@ -32,21 +33,41 @@ void inicializaPilha(Pilha *pilha){
     inserePalavra('F','A','C','E',pilha);
 }
 
-int qtdPremios(Pilha *pilha){
-    Palavra *aux;
-    if((pilha->topo!=NULL)&&(pilha->topo->prox!=NULL)){
-        aux=pilha->topo;
-        pilha->topo=pilha->topo->prox;
+int qtdGanhadores(Pilha *pilha){
+    int qtdPremios=0;
+    Palavra *palavra=pilha->topo;
+    Palavra *anterior=NULL;
 
-        if((aux->primLetra==pilha->topo->quarLetra)&&(aux->segLetra==pilha->topo->tercLetra)&&(aux->tercLetra==pilha->topo->segLetra)&&(aux->quarLetra==pilha->topo->primLetra)){
+    while((palavra!=NULL)&&(palavra->prox!=NULL)){
+
+        if((palavra->primLetra==palavra->prox->quarLetra)&&(palavra->segLetra==palavra->prox->tercLetra)&&(palavra->tercLetra==palavra->prox->segLetra)&&(palavra->quarLetra==palavra->prox->primLetra)){
+            if(pilha->topo==palavra){ 
+                pilha->topo=palavra->prox->prox;
+            }else{
+                anterior->prox=palavra->prox->prox;
+            }
+
+            Palavra *aux=palavra, *aux2=palavra->prox;
+            palavra=palavra->prox->prox;
             free(aux);
-            return 1+qtdPremios(pilha);
+            free(aux2);
+   
+            qtdPremios++;
         }else{
-            free(aux);
-            return 0+qtdPremios(pilha);
+            anterior=palavra;
+            palavra=palavra->prox;
         }
+        
+    }
+
+    if(pilha->topo==NULL){
+        inicializaPilha(pilha);
+    }
+
+    if(qtdPremios==0){
+        return qtdPremios;
     }else{
-        return 0;
+        return qtdPremios+qtdGanhadores(pilha);
     }
 }
 
@@ -54,30 +75,33 @@ int main(){
     Pilha pilha;
     inicializaPilha(&pilha);
 
-    /*
-    int resposta;
-    do{
-        printf('O que você deseja fazer?\n1 - Adicionar novas letras\n2 - Ver quantos prêmios foram dados\n0 - finalizar\n');
-        scanf("%d", &resposta);
+    int n;
+    printf("Quantos visitantes vão receber letras?");
+    scanf("%d",&n);
 
-        switch(){
-            case 1:
-            break;
-            case 2:
-            break;
-            case 0:
-            break;
-        }
+    for(int i=0;i<n;i++){
+        char primLetra, segLetra, tercLetra, quarLetra;
 
-    }while(resposta!=0);
-    */
+        getchar();
+        printf("Qual vai ser a primeira letra?\n->");
+        scanf("%c",&primLetra);
 
-    inserePalavra('E','C','A','F',&pilha);
-    inserePalavra('E','C','F','A',&pilha);
-    inserePalavra('A','C','E','F',&pilha);
-    inserePalavra('F','E','C','A',&pilha);
-    inserePalavra('A','C','E','F',&pilha);
+        getchar();
+        printf("Qual vai ser a segunda letra?\n->");
+        scanf("%c",&segLetra);
 
-    printf("%d",qtdPremios(&pilha));
+        getchar();
+        printf("Qual vai ser a terceira letra?\n->");
+        scanf("%c",&tercLetra);
+
+        getchar();
+        printf("Qual vai ser a quarta letra?\n->");
+        scanf("%c",&quarLetra);
+
+        inserePalavra(primLetra, segLetra, tercLetra, quarLetra, &pilha);
+    }
+
+    printf("%d",qtdGanhadores(&pilha));
+
     return 0;
 }
