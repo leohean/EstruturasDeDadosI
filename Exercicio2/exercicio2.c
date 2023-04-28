@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct palavra{
     char primLetra, segLetra, tercLetra, quarLetra;
@@ -76,32 +77,42 @@ int main(){
     inicializaPilha(&pilha);
 
     int n;
-    printf("Quantos visitantes vão receber letras?");
+    printf("Quantos visitantes vão receber letras?\n-> ");
     scanf("%d",&n);
+
+    printf("\n");
 
     for(int i=0;i<n;i++){
         char primLetra, segLetra, tercLetra, quarLetra;
 
+        printf("#%d palavra\n",(i+1));
+
         getchar();
-        printf("Qual vai ser a primeira letra?\n->");
+        printf("Qual vai ser a primeira letra?\n-> ");
         scanf("%c",&primLetra);
+        primLetra=toupper(primLetra);
 
         getchar();
-        printf("Qual vai ser a segunda letra?\n->");
+        printf("\nQual vai ser a segunda letra?\n-> ");
         scanf("%c",&segLetra);
+        segLetra=toupper(segLetra);
 
         getchar();
-        printf("Qual vai ser a terceira letra?\n->");
+        printf("\nQual vai ser a terceira letra?\n-> ");
         scanf("%c",&tercLetra);
+        tercLetra=toupper(tercLetra);
 
         getchar();
-        printf("Qual vai ser a quarta letra?\n->");
+        printf("\nQual vai ser a quarta letra?\n-> ");
         scanf("%c",&quarLetra);
+        quarLetra=toupper(quarLetra);
+
+        printf("\n");
 
         inserePalavra(primLetra, segLetra, tercLetra, quarLetra, &pilha);
     }
 
-    printf("%d",qtdGanhadores(&pilha));
+    printf("O número de ganhadores de prêmios é %d\n",qtdGanhadores(&pilha));
 
     return 0;
 }
