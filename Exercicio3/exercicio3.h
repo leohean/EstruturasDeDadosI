@@ -1,9 +1,9 @@
 #include <stdbool.h>
 
 typedef struct cliente{
-    char nome;
+    char nome[30];
     int numItens;
-    bool tipoCliente;
+    bool preferencial;
     struct cliente *prox;
     struct cliente *ant;
 }Cliente;
@@ -21,12 +21,14 @@ Fila caixaRapido;
 Fila caixaPreferencial;
 
 void inicializaFila(Fila *fila);
+bool verificaNull(Fila *fila);
 
 void geraClientes();
-void criaCliente(Fila *fila, int numItens);
+void criaCliente(Fila *fila, char nome[], int numItens, bool prioritario);
 
 void enfileiraCaixasNormais(Fila *fila);
 void enfileiraCaixaPref(Fila *fila);
+void desenfileiraCaixa(Fila *fila);
 
 int contaClientes(Fila *fila);
 
